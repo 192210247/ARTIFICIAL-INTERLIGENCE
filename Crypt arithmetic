@@ -1,0 +1,53 @@
+from itertools import permutations
+
+def is_valid_solution(puzzle, mapping):
+    """Check if the current mapping solves the puzzle."""
+    # Replace letters in the puzzle with their mapped digits
+    for letter, digit in mapping.items():
+        puzzle = puzzle.replace(letter, str(digit))
+
+    # Split the puzzle into operands and result
+    operands, result = puzzle.split('=')
+    operands = operands.split('+')
+    
+    # Remove leading zeros and evaluate
+    try:
+        operands = [int(op.strip()) for op in operands]
+        result = int(result.strip())
+    except ValueError:
+        return False
+
+    return sum(operands) == result
+
+def solve_crypt_arithmetic(puzzle):
+    """Solve a crypt-arithmetic problem."""
+    # Extract unique letters from the puzzle
+    letters = set(c for c in puzzle if c.isalpha())
+    
+    if len(letters) > 10:
+        raise ValueError("Too many unique letters; cannot map to unique digits.")
+    
+    # Try all permutations of digits for the unique letters
+    for perm in permutations(range(10), len(letters)):
+        mapping = dict(zip(letters, perm))
+        
+        # Leading digit cannot be zero
+        if any(mapping[word[0]] == 0 for word in puzzle.split() if word.isalpha()):
+            continue
+        
+        if is_valid_solution(puzzle, mapping):
+            return {letter: mapping[letter] for letter in sorted(letters)}
+
+    return None
+
+# Main Program
+if __name__ == "__main__":
+    puzzle = "SEND + MORE = MONEY"
+    solution = solve_crypt_arithmetic(puzzle)
+
+    if solution:
+        print("Solution found:")
+        for letter, digit in sorted(solution.items()):
+            print(f"{letter} = {digit}")
+    else:
+        print("No solution exists.")
