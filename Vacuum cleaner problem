@@ -1,0 +1,61 @@
+class VacuumCleanerProblem:
+    def __init__(self, room_a, room_b):
+        """
+        Initialize the vacuum cleaner problem with two rooms.
+        room_a and room_b represent whether the room is dirty (1) or clean (0).
+        """
+        self.room_a = room_a  # 1 = dirty, 0 = clean
+        self.room_b = room_b  # 1 = dirty, 0 = clean
+        self.location = 'A'   # Initially, the vacuum is in room A
+        self.steps = []       # To track the steps taken by the vacuum
+
+    def is_clean(self):
+        """Check if both rooms are clean."""
+        return self.room_a == 0 and self.room_b == 0
+
+    def clean_room(self):
+        """Clean the current room."""
+        if self.location == 'A' and self.room_a == 1:
+            self.room_a = 0
+            self.steps.append("Clean room A")
+        elif self.location == 'B' and self.room_b == 1:
+            self.room_b = 0
+            self.steps.append("Clean room B")
+
+    def move_to_other_room(self):
+        """Move the vacuum cleaner to the other room."""
+        if self.location == 'A':
+            self.location = 'B'
+            self.steps.append("Move to room B")
+        else:
+            self.location = 'A'
+            self.steps.append("Move to room A")
+
+    def perform_action(self):
+        """Perform the appropriate action based on the current state."""
+        # While both rooms are not clean, keep cleaning and moving
+        while not self.is_clean():
+            if self.location == 'A':
+                if self.room_a == 1:
+                    self.clean_room()
+                else:
+                    self.move_to_other_room()
+            elif self.location == 'B':
+                if self.room_b == 1:
+                    self.clean_room()
+                else:
+                    self.move_to_other_room()
+
+    def show_steps(self):
+        """Display the steps taken by the vacuum cleaner."""
+        print("Steps taken:")
+        for step in self.steps:
+            print(step)
+
+
+# Main Program
+if __name__ == "__main__":
+    # Create an instance of the vacuum cleaner problem with both rooms dirty
+    problem = VacuumCleanerProblem(room_a=1, room_b=1)
+    problem.perform_action()
+    problem.show_steps()
