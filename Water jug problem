@@ -1,0 +1,56 @@
+from collections import deque
+
+def water_jug_problem(jug1_capacity, jug2_capacity, target):
+    """Solves the Water Jug Problem using BFS."""
+    # To keep track of visited states
+    visited = set()
+
+    # BFS queue: stores tuples of (jug1, jug2, path)
+    queue = deque([(0, 0, [])])
+
+    while queue:
+        jug1, jug2, path = queue.popleft()
+
+        # If we've reached the target
+        if jug1 == target or jug2 == target:
+            path.append((jug1, jug2))
+            return path
+
+        # Mark current state as visited
+        if (jug1, jug2) in visited:
+            continue
+        visited.add((jug1, jug2))
+
+        # Possible next states
+        next_states = [
+            (jug1_capacity, jug2),  # Fill Jug 1
+            (jug1, jug2_capacity),  # Fill Jug 2
+            (0, jug2),              # Empty Jug 1
+            (jug1, 0),              # Empty Jug 2
+            # Pour from Jug 1 to Jug 2
+            (max(0, jug1 - (jug2_capacity - jug2)), min(jug2_capacity, jug1 + jug2)),
+            # Pour from Jug 2 to Jug 1
+            (min(jug1_capacity, jug1 + jug2), max(0, jug2 - (jug1_capacity - jug1)))
+        ]
+
+        # Add valid states to the queue
+        for state in next_states:
+            if state not in visited:
+                queue.append((state[0], state[1], path + [(jug1, jug2)]))
+
+    return None  # No solution exists
+
+# Main Program
+if __name__ == "__main__":
+    jug1_capacity = 4  # Capacity of Jug 1
+    jug2_capacity = 3  # Capacity of Jug 2
+    target = 2         # Target amount of water
+
+    solution = water_jug_problem(jug1_capacity, jug2_capacity, target)
+
+    if solution:
+        print("Steps to solve the Water Jug Problem:")
+        for step in solution:
+            print(f"Jug 1: {step[0]} liters, Jug 2: {step[1]} liters")
+    else:
+        print("No solution exists.")
