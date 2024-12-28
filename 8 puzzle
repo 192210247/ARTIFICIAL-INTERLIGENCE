@@ -1,0 +1,95 @@
+import heapq
+import copy
+
+# Define the goal state
+GOAL_STATE = [[1, 2, 3],
+              [4, 5, 6],
+              [7, 8, 0]]  # 0 represents the empty tile
+
+# Helper functions
+def find_position(state, value):
+    for i in range(3):
+        for j in range(3):
+            if state[i][j] == value:
+                return i, j
+
+def is_solvable(state):
+    flattened = [num for row in state for num in row if num != 0]
+    inversions = 0
+    for i in range(len(flattened)):
+        for j in range(i + 1, len(flattened)):
+            if flattened[i] > flattened[j]:
+                inversions += 1
+    return inversions % 2 == 0
+
+def heuristic(state):
+    """Manhattan distance heuristic"""
+    distance = 0
+    for i in range(3):
+        for j in range(3):
+            value = state[i][j]
+            if value != 0:
+                goal_i, goal_j = find_position(GOAL_STATE, value)
+                distance += abs(i - goal_i) + abs(j - goal_j)
+    return distance
+
+def get_neighbors(state):
+    """Generate possible moves for the empty tile."""
+    i, j = find_position(state, 0)
+    moves = []
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Up, Down, Left, Right
+    for di, dj in directions:
+        new_i, new_j = i + di, j + dj
+        if 0 <= new_i < 3 and 0 <= new_j < 3:
+            new_state = copy.deepcopy(state)
+            new_state[i][j], new_state[new_i][new_j] = new_state[new_i][new_j], new_state[i][j]
+            moves.append(new_state)
+    return moves
+
+# A* Search Algorithm
+def a_star(initial_state):
+    if not is_solvable(initial_state):
+        return None, "Puzzle is not solvable."
+    
+    pq = []  # Priority queue
+    visited = set()
+    initial_heuristic = heuristic(initial_state)
+    heapq.heappush(pq, (initial_heuristic, 0, initial_state, []))  # (f = g + h, g, state, path)
+
+    while pq:
+        f, g, current_state, path = heapq.heappop(pq)
+
+        if current_state == GOAL_STATE:
+            return path, "Solved successfully."
+
+        state_tuple = tuple(tuple(row) for row in current_state)
+        if state_tuple in visited:
+            continue
+        visited.add(state_tuple)
+
+        for neighbor in get_neighbors(current_state):
+            new_path = path + [neighbor]
+            heapq.heappush(pq, (g + 1 + heuristic(neighbor), g + 1, neighbor, new_path))
+
+    return None, "No solution found."
+
+# Main Program
+if __name__ == "__main__":
+    initial_state = [[1, 2, 3],
+                     [4, 0, 6],
+                     [7, 5, 8]]
+
+    print("Initial State:")
+    for row in initial_state:
+        print(row)
+
+    path, message = a_star(initial_state)
+
+    if path:
+        print("\nSolution Found:")
+        for step, state in enumerate(path, 1):
+            print(f"\nStep {step}:")
+            for row in state:
+                print(row)
+    else:
+        print("\n" + message)
