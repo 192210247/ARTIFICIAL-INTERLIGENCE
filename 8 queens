@@ -1,0 +1,57 @@
+def print_solution(board):
+    """Prints the chessboard with queens placed."""
+    for row in board:
+        print(" ".join("Q" if col else "." for col in row))
+    print()
+
+def is_safe(board, row, col, n):
+    """Checks if placing a queen at (row, col) is safe."""
+    # Check this row on the left side
+    for i in range(col):
+        if board[row][i]:
+            return False
+
+    # Check the upper diagonal on the left side
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j]:
+            return False
+
+    # Check the lower diagonal on the left side
+    for i, j in zip(range(row, n), range(col, -1, -1)):
+        if board[i][j]:
+            return False
+
+    return True
+
+def solve_n_queens_util(board, col, n):
+    """Recursive utility function to solve the N-Queens problem."""
+    if col >= n:  # All queens are placed
+        print_solution(board)
+        return True
+
+    res = False
+    for i in range(n):
+        if is_safe(board, i, col, n):
+            # Place the queen
+            board[i][col] = 1
+
+            # Recur to place the rest of the queens
+            res = solve_n_queens_util(board, col + 1, n) or res
+
+            # Backtrack and remove the queen
+            board[i][col] = 0
+
+    return res
+
+def solve_n_queens(n):
+    """Solves the N-Queens problem for an NxN chessboard."""
+    board = [[0] * n for _ in range(n)]
+    if not solve_n_queens_util(board, 0, n):
+        print("No solution exists.")
+    else:
+        print("All solutions have been printed.")
+
+# Main Program
+if __name__ == "__main__":
+    n = 8  # Size of the chessboard (8 for the 8-Queens problem)
+    solve_n_queens(n)
