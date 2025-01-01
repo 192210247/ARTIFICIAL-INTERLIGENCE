@@ -1,0 +1,48 @@
+% Facts: Define the heuristic values for each node.
+% For simplicity, the heuristic represents the estimated cost from the node to the goal.
+heuristic(a, 3).
+heuristic(b, 2).
+heuristic(c, 1).
+heuristic(d, 0).  % Goal node (d)
+
+% Facts: Define the connections between nodes (edges).
+edge(a, b).
+edge(a, c).
+edge(b, d).
+edge(c, d).
+
+% Rule: Best First Search algorithm.
+best_first_search(Start, Goal, Path) :-
+    best_first_search([Start], Goal, [], Path).
+
+% Base case: If the start node is the goal, return the path.
+best_first_search([Goal|Visited], Goal, Visited, [Goal|Visited]).
+
+% Recursive case: Explore the node with the lowest heuristic value.
+best_first_search([Current|Visited], Goal, VisitedSoFar, Path) :-
+    findall(Next, (edge(Current, Next), \+ member(Next, Visited)), Neighbors),
+    prioritize(Neighbors, PrioritizedNeighbors),
+    best_first_search(PrioritizedNeighbors, Goal, [Current|VisitedSoFar], Path).
+
+% Rule to prioritize neighbors based on their heuristic value.
+prioritize([], []).
+
+prioritize([H|T], [H|PrioritizedTail]) :-
+    find_heuristic(H, HeuristicH),
+    prioritize(T, PrioritizedTail),
+    sort_neighbors_by_heuristic([H|T], Sorted),
+    Sorted = [H|_].
+
+% Find heuristic for a node.
+find_heuristic(Node, Heuristic) :-
+    heuristic(Node, Heuristic).
+
+% Function to sort nodes by their heuristic values.
+sort_neighbors_by_heuristic(Neighbors, Sorted) :-
+    map_list_to_pairs(heuristic_value, Neighbors, Pairs),
+    keysort(Pairs, SortedPairs),
+    pairs_values(SortedPairs, Sorted).
+
+% Helper predicate to map nodes to their heuristic values.
+heuristic_value(Node, Value-Node) :-
+    heuristic(Node, Value).
