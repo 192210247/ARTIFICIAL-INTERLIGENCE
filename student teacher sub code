@@ -1,0 +1,38 @@
+% Facts: teacher(TeacherName, Subject, SubjectCode).
+teacher('Mr. Smith', 'Mathematics', 'M101').
+teacher('Ms. Johnson', 'Physics', 'P202').
+teacher('Dr. Brown', 'Chemistry', 'C303').
+teacher('Mrs. Davis', 'Biology', 'B404').
+teacher('Mr. Wilson', 'Computer Science', 'CS505').
+
+% Facts: student(StudentName, Subject, SubjectCode).
+student('Alice', 'Mathematics', 'M101').
+student('Bob', 'Physics', 'P202').
+student('Charlie', 'Chemistry', 'C303').
+student('Diana', 'Biology', 'B404').
+student('Eve', 'Computer Science', 'CS505').
+student('Frank', 'Mathematics', 'M101').
+student('Grace', 'Physics', 'P202').
+
+% Rules:
+
+% Find the teacher of a specific subject.
+find_teacher(Subject, Teacher) :-
+    teacher(Teacher, Subject, _).
+
+% Find the students studying a specific subject.
+find_students(Subject, Students) :-
+    findall(Student, student(Student, Subject, _), Students).
+
+% Find the subject code for a given subject.
+find_subject_code(Subject, Code) :-
+    teacher(_, Subject, Code).
+
+% Find the subject and teacher for a given subject code.
+find_subject_and_teacher(Code, Subject, Teacher) :-
+    teacher(Teacher, Subject, Code).
+
+% Find all students taught by a specific teacher.
+students_of_teacher(Teacher, Students) :-
+    teacher(Teacher, Subject, _),
+    find_students(Subject, Students).
