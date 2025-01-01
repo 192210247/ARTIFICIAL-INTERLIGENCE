@@ -1,0 +1,27 @@
+% Facts: Define diseases and their related diet recommendations.
+disease(cardiovascular, low_fat).
+disease(diabetes, low_sugar).
+disease(obesity, low_calorie).
+disease(hypertension, low_sodium).
+disease(gout, low_purine).
+disease(osteoporosis, high_calcium).
+disease(anemia, high_iron).
+
+% Rules: Suggest a diet based on the disease.
+suggest_diet(Disease, Diet) :-
+    disease(Disease, Diet).
+
+% Alternative rule for getting information about diet.
+diet_advice(Disease, Advice) :-
+    suggest_diet(Disease, Diet),
+    diet_advice_for(Diet, Advice).
+
+% Facts: Define specific diet advice for each diet.
+diet_advice_for(low_fat, 'Avoid foods high in saturated fats like fried food, red meat, and full-fat dairy products. Focus on lean proteins and healthy fats like those found in olive oil and avocados.').
+diet_advice_for(low_sugar, 'Limit sugar intake by avoiding sugary snacks, soft drinks, and desserts. Focus on whole foods like fruits, vegetables, and whole grains.').
+diet_advice_for(low_calorie, 'Consume fewer calories by choosing low-calorie foods such as fruits, vegetables, and lean proteins. Avoid processed and high-calorie foods.').
+diet_advice_for(low_sodium, 'Reduce sodium by avoiding processed foods, canned soups, salty snacks, and fast food. Focus on fresh vegetables, fruits, and lean meats.').
+diet_advice_for(low_purine, 'Limit foods that are high in purines, such as red meat, shellfish, and alcohol. Focus on plant-based proteins like beans and legumes.').
+diet_advice_for(high_calcium, 'Increase calcium intake by consuming dairy products, fortified plant-based milks, leafy greens, and calcium-rich foods like tofu and almonds.').
+diet_advice_for(high_iron, 'Consume iron-rich foods such as red meat, leafy greens, legumes, and fortified cereals. Pair with vitamin C-rich foods to enhance absorption.').
+
