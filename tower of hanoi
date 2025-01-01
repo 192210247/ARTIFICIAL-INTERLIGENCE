@@ -1,0 +1,21 @@
+% Rule: hanoi(N, Source, Target, Auxiliary, Moves)
+% N: Number of disks.
+% Source: The initial peg.
+% Target: The destination peg.
+% Auxiliary: The auxiliary peg.
+% Moves: A list of moves as (Source -> Target).
+
+hanoi(0, _, _, _, []) :- !.  % Base case: no disks, no moves.
+
+hanoi(N, Source, Target, Auxiliary, Moves) :-
+    N > 0,
+    N1 is N - 1,
+    % Move N-1 disks from Source to Auxiliary using Target as auxiliary.
+    hanoi(N1, Source, Auxiliary, Target, Moves1),
+    % Move the largest disk directly from Source to Target.
+    MoveDisk = [move(Source, Target)],
+    % Move N-1 disks from Auxiliary to Target using Source as auxiliary.
+    hanoi(N1, Auxiliary, Target, Source, Moves2),
+    % Combine all moves.
+    append(Moves1, MoveDisk, TempMoves),
+    append(TempMoves, Moves2, Moves).
