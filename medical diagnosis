@@ -1,0 +1,47 @@
+% Facts: Symptoms for each disease.
+% These facts represent symptoms of different diseases.
+symptom(cold, fever).
+symptom(cold, cough).
+symptom(cold, sore_throat).
+symptom(flu, fever).
+symptom(flu, body_ache).
+symptom(flu, cough).
+symptom(flu, sore_throat).
+symptom(malaria, fever).
+symptom(malaria, chills).
+symptom(malaria, headache).
+symptom(chickenpox, rash).
+symptom(chickenpox, fever).
+symptom(chickenpox, tiredness).
+
+% Rule: Diagnose a disease based on symptoms.
+diagnose(Disease) :-
+    write('Please provide symptoms one by one and I will try to diagnose: '), nl,
+    get_symptoms(Symptoms),
+    check_disease(Symptoms, Disease),
+    write('Diagnosis complete. The disease is: '), write(Disease), nl.
+
+% Rule to get the list of symptoms from the user.
+get_symptoms(Symptoms) :-
+    ask_symptom(Symptom),
+    collect_symptoms(Symptom, Symptoms).
+
+ask_symptom(Symptom) :-
+    write('Enter a symptom (or "done" if you have no more symptoms): '),
+    read(Symptom).
+
+collect_symptoms(done, []) :- !.  % End input collection when the user enters "done".
+collect_symptoms(Symptom, [Symptom|Rest]) :-
+    ask_symptom(NextSymptom),
+    collect_symptoms(NextSymptom, Rest).
+
+% Rule to check if the symptoms match a disease.
+check_disease([], _) :- fail.  % If no symptoms are given, fail.
+check_disease([Symptom|Rest], Disease) :-
+    symptom(Disease, Symptom),  % Check if the symptom matches a disease.
+    check_disease(Rest, Disease).  % Recursively check the remaining symptoms.
+
+% Alternative rule for handling single symptom case.
+check_disease([Symptom], Disease) :-
+    symptom(Disease, Symptom).
+
