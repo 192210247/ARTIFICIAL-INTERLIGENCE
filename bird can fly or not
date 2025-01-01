@@ -1,0 +1,22 @@
+% Facts: Define the type of birds and their ability to fly.
+bird(canary).
+bird(eagle).
+bird(penguin).
+bird(ostrich).
+bird(sparrow).
+
+% Rules: Define exceptions for flight capability.
+can_fly(Bird) :-
+    bird(Bird),
+    \+ flightless(Bird).  % A bird can fly if it is not in the flightless category.
+
+% Facts: Define flightless birds.
+flightless(penguin).
+flightless(ostrich).
+
+% Rules to print whether a bird can fly or not.
+bird_status(Bird, Status) :-
+    (   can_fly(Bird) ->
+        Status = 'can fly'
+    ;   Status = 'cannot fly'
+    ).
