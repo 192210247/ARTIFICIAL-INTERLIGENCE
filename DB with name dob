@@ -1,0 +1,14 @@
+% Facts: Each fact represents a person with their name and DOB.
+person('Alice', date(1990, 5, 15)).
+person('Bob', date(1985, 10, 23)).
+person('Charlie', date(2000, 1, 8)).
+person('Diana', date(1995, 12, 19)).
+person('Eve', date(1988, 7, 3)).
+
+% Rule: Retrieve the DOB of a person given their name.
+get_dob(Name, DOB) :-
+    person(Name, DOB).
+
+% Rule: Retrieve the name of a person given their DOB.
+get_name(DOB, Name) :-
+    person(Name, DOB).
