@@ -1,0 +1,71 @@
+% Facts: Define parent-child relationships.
+parent(john, mary).    % John is a parent of Mary.
+parent(john, paul).    % John is a parent of Paul.
+parent(susan, mary).   % Susan is a parent of Mary.
+parent(susan, paul).   % Susan is a parent of Paul.
+parent(mary, lisa).    % Mary is a parent of Lisa.
+parent(mary, tom).     % Mary is a parent of Tom.
+parent(paul, anna).    % Paul is a parent of Anna.
+parent(paul, james).   % Paul is a parent of James.
+
+% Facts: Define genders.
+male(john).
+male(paul).
+male(tom).
+male(james).
+
+female(susan).
+female(mary).
+female(lisa).
+female(anna).
+
+% Rules:
+
+% Child relationship (inverse of parent).
+child(X, Y) :-
+    parent(Y, X).
+
+% Sibling relationship.
+sibling(X, Y) :-
+    parent(P, X),
+    parent(P, Y),
+    X \= Y.
+
+% Brother relationship.
+brother(X, Y) :-
+    sibling(X, Y),
+    male(X).
+
+% Sister relationship.
+sister(X, Y) :-
+    sibling(X, Y),
+    female(X).
+
+% Grandparent relationship.
+grandparent(X, Y) :-
+    parent(X, P),
+    parent(P, Y).
+
+% Grandchild relationship.
+grandchild(X, Y) :-
+    grandparent(Y, X).
+
+% Cousin relationship.
+cousin(X, Y) :-
+    parent(P1, X),
+    parent(P2, Y),
+    sibling(P1, P2).
+
+% Ancestor relationship (recursive).
+ancestor(X, Y) :-
+    parent(X, Y).
+ancestor(X, Y) :-
+    parent(X, Z),
+    ancestor(Z, Y).
+
+% Descendant relationship (recursive).
+descendant(X, Y) :-
+    child(X, Y).
+descendant(X, Y) :-
+    child(X, Z),
+    descendant(Z, Y).
