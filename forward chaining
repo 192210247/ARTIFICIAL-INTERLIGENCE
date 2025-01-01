@@ -1,0 +1,6 @@
+% Add new facts for air conditioner
+fact(plugged_in(ac)).
+fact(power_on(ac)).
+
+% Add rule for air conditioner use
+fact(power_on(ac)).      % Air conditioner is powered on.
