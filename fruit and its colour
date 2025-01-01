@@ -1,0 +1,20 @@
+% Facts: Define fruits and their colors.
+color(apple, red).
+color(banana, yellow).
+color(grapes, purple).
+color(orange, orange).
+color(kiwi, brown).
+color(pear, green).
+color(strawberry, red).
+color(lemon, yellow).
+color(mango, yellow).
+color(blueberry, blue).
+
+% Rule to find the color of a fruit.
+fruit_color(Fruit, Color) :-
+    color(Fruit, Color).
+
+% Rule to find fruits of a specific color.
+fruits_of_color(Color, Fruit) :-
+    color(Fruit, Color).
+
