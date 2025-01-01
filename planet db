@@ -1,0 +1,31 @@
+% Facts: planet(Name, DistanceFromSunAU, MassEarthMasses, OrbitalPeriodYears).
+planet('Mercury', 0.39, 0.055, 0.24).
+planet('Venus', 0.72, 0.815, 0.62).
+planet('Earth', 1.00, 1.00, 1.00).
+planet('Mars', 1.52, 0.107, 1.88).
+planet('Jupiter', 5.20, 318.00, 11.86).
+planet('Saturn', 9.58, 95.16, 29.46).
+planet('Uranus', 19.20, 14.54, 84.01).
+planet('Neptune', 30.05, 17.15, 164.8).
+
+% Rules:
+
+% Find the distance of a planet from the Sun.
+find_distance(Planet, Distance) :-
+    planet(Planet, Distance, _, _).
+
+% Find the mass of a planet in Earth masses.
+find_mass(Planet, Mass) :-
+    planet(Planet, _, Mass, _).
+
+% Find the orbital period of a planet.
+find_orbital_period(Planet, Period) :-
+    planet(Planet, _, _, Period).
+
+% Find planets closer to the Sun than a given distance.
+planets_closer_than(Distance, Planets) :-
+    findall(Planet, (planet(Planet, D, _, _), D < Distance), Planets).
+
+% Find planets farther from the Sun than a given distance.
+planets_farther_than(Distance, Planets) :-
+    findall(Planet, (planet(Planet, D, _, _), D > D
