@@ -1,0 +1,38 @@
+% Facts: Positions of the monkey, banana, and ladder.
+at(monkey, ground).         % Monkey is on the ground initially.
+at(banana, high).           % Banana is hanging at a high position.
+at(ladder, ground).         % Ladder is on the ground initially.
+
+% Rules to move the monkey.
+move_monkey_to_ladder :-
+    at(monkey, ground),
+    at(ladder, ground),
+    write('Monkey moves to the ladder.'), nl,
+    retract(at(monkey, ground)),
+    assert(at(monkey, ladder)).
+
+move_monkey_to_banana :-
+    at(monkey, ladder),
+    at(ladder, under_banana),
+    write('Monkey climbs the ladder and reaches the banana.'), nl,
+    retract(at(monkey, ladder)),
+    assert(at(monkey, high)).
+
+% Rules to move the ladder.
+move_ladder_to_under_banana :-
+    at(ladder, ground),
+    at(banana, high),
+    write('Monkey moves the ladder under the banana.'), nl,
+    retract(at(ladder, ground)),
+    assert(at(ladder, under_banana)).
+
+% Goal: Get the banana.
+get_banana :-
+    at(monkey, ground),
+    at(banana, high),
+    at(ladder, ground),
+    move_ladder_to_under_banana,  % Move the ladder under the banana
+    move_monkey_to_ladder,        % Move the monkey to the ladder
+    move_monkey_to_banana,        % Monkey climbs the ladder and gets the banana
+    write('Monkey has obtained the banana!'), nl.
+
