@@ -1,0 +1,39 @@
+% Facts: Symptoms of various diseases
+symptom(cold, cough).
+symptom(cold, sore_throat).
+symptom(flu, fever).
+symptom(flu, body_ache).
+symptom(flu, cough).
+symptom(flu, sore_throat).
+symptom(malaria, fever).
+symptom(malaria, chills).
+symptom(malaria, headache).
+symptom(chickenpox, rash).
+symptom(chickenpox, fever).
+symptom(chickenpox, tiredness).
+
+% Rules: Conditions to diagnose diseases based on symptoms
+disease(cold) :-
+    symptom(cold, cough),
+    symptom(cold, sore_throat).
+
+disease(flu) :-
+    symptom(flu, fever),
+    symptom(flu, body_ache),
+    symptom(flu, cough),
+    symptom(flu, sore_throat).
+
+disease(malaria) :-
+    symptom(malaria, fever),
+    symptom(malaria, chills),
+    symptom(malaria, headache).
+
+disease(chickenpox) :-
+    symptom(chickenpox, rash),
+    symptom(chickenpox, fever),
+    symptom(chickenpox, tiredness).
+
+% Backward Chaining Rule: Diagnose the disease based on symptoms.
+diagnose(Disease) :-
+    disease(Disease),
+    write('The disease is: '), write(Disease), nl.
